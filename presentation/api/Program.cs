@@ -1,5 +1,9 @@
 using api;
 using AutoMapper;
+using AplicationService = application.services;
+using DomainService = domain.services;
+using InfraestructureRepository = infraestructure.repository;
+using DomainRepository = domain.contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+
 
 //mapper
 var mapperConfig = new MapperConfiguration(m=>
@@ -20,6 +24,14 @@ var mapperConfig = new MapperConfiguration(m=>
 
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
+
+
+//DDD
+builder.Services.AddTransient<AplicationService.IArtistService, AplicationService.ArtistService>();
+builder.Services.AddTransient<DomainService.IArtistService, DomainService.ArtistService>();
+builder.Services.AddTransient<DomainRepository.IArtistaRepository, InfraestructureRepository.ArtistaRepository>();
+
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
