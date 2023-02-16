@@ -1,3 +1,6 @@
+using api;
+using AutoMapper;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,6 +11,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+//mapper
+var mapperConfig = new MapperConfiguration(m=>
+{
+    m.AddProfile<MappingProfile>();
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
